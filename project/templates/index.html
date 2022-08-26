@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News Sentiment Analysis</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    th{
+      text-align: center;
+    }
+    
+    table, th, td {
+      border:1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      background-color: #96D4D4;
+    }
+    
+
+   
+  </style>
+</head>
+
+<body onload="temp();">
+  <h1 class="header">News Sentiment</h1>
+
+  
+  <div style="padding-top: 10px; padding-left: 30px;" class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+    <label>Enter News </label><span></span> <input type="text" id="pharse" /><span></span>
+    <button onclick=" get_sentiment();"class="btn btn-primary"class="w3-button w3-border w3-hover-green">Guess the sentiment</button>
+  </div>
+  </div>
+
+  </div>
+  <div style="padding-top: 10px; padding-left: 30px;padding-right: 30px;">
+    <table class="table" id="table"style="width:100%">
+      <thead>
+        <th>News</th>
+        <th>Sentiment</th>
+        <th>Emotion</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="news"></td>
+          <td id="sentiment"></td>
+          <td id="emotion"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    function get_sentiment() {
+      var news = document.getElementById("pharse").value;
+      fetch("/sentiment/" + news)
+        .then((resp) => resp.json())
+        .then((data) => {
+          document.getElementById("news").innerHTML = data["News"];
+          document.getElementById("sentiment").innerHTML = data["Sentiment"];
+          var senti_ = data["Sentiment_score"];
+          if (senti_ == -1) {
+            document.getElementById("emotion").innerHTML = "&#128560;";
+          } else if (senti_ == 0) {
+            document.getElementById("emotion").innerHTML = "&#128558;";
+          } else {
+            document.getElementById("emotion").innerHTML = "&#128571;";
+          }
+          document.getElementById('table').style.display="inline-block";
+
+          console.log(data);
+        });
+    }
+
+    function temp(){
+      document.getElementById('table').style.display = "None";
+    }
+  </script>
+ 
+  
+  
+</body>
+
+</html>
